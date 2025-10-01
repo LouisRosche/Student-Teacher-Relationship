@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Guide: Building Strong Teacher Relationships</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .why-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .why-box h2 {
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+        
+        .why-box p {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 200px;
+            margin: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .do-section .section-title {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .dont-section .section-title {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .behavior-category {
+            margin-bottom: 30px;
+        }
+        
+        .category-header {
+            font-size: 1.4em;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 5px solid #667eea;
+            font-weight: 600;
+        }
+        
+        .behavior-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .behavior-item {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .behavior-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .do-section .behavior-item {
+            border-left-color: #10b981;
+        }
+        
+        .dont-section .behavior-item {
+            border-left-color: #ef4444;
+        }
+        
+        .behavior-title {
+            font-weight: 700;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+        
+        .behavior-description {
+            color: #4a5568;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        
+        .behavior-example {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-style: italic;
+            color: #718096;
+            margin-top: 8px;
+            border-left: 3px solid #cbd5e0;
+        }
+        
+        .example-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-style: normal;
+        }
+        
+        .quick-reference {
+            background: #fef3c7;
+            border: 3px solid #f59e0b;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+        
+        .quick-reference h2 {
+            color: #92400e;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+        
+        .quick-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .quick-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .quick-item.do {
+            border-left: 4px solid #10b981;
+        }
+        
+        .quick-item.dont {
+            border-left: 4px solid #ef4444;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .behavior-item {
+                page-break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your Guide to Building Strong Teacher Relationships</h1>
+            <div class="subtitle">Actions That Lead to Your Success</div>
+        </div>
+        
+        <div class="why-box">
+            <h2>Why This Matters to YOU</h2>
+            <p>Research tracking over 2.6 million students across 70+ years shows that students who have positive relationships with their teachers are significantly more engaged in learning and achieve better grades. The effect is so strong that researchers measured it at 0.72 on the effect size scale—that's considered highly significant. Translation: <strong>How you interact with your teachers directly impacts your learning and grades.</strong></p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">2.6M+</div>
+                    <div class="stat-label">Students Studied</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">0.72</div>
+                    <div class="stat-label">Effect Size (Highly Significant)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">70+</div>
+                    <div class="stat-label">Years of Research</div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 15px;"><strong>Bottom Line:</strong> Students who actively build positive relationships with teachers learn more, participate more, and perform better. This guide shows you exactly HOW to do that with specific, observable behaviors you can start TODAY.</p>
+        </div>
+        
+        <!-- DO SECTION -->
+        <div class="section do-section">
+            <div class="section-title">✓ DO: Actions That Build Strong Relationships</div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Engaging with Teachers</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Greet Your Teacher</div>
+                        <div class="behavior-description">Make eye contact and say "hi" or "good morning" when you enter the classroom.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Walking in, making eye contact with teacher at door, saying "Good morning, Ms. Chen" or just "Hey" with a nod.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Ask Questions Early</div>
+                        <div class="behavior-description">Raise your hand or use the agreed signal when you don't understand—within 5 minutes of instruction, not after class.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Teacher explains a math problem, you're confused on step 2, you raise your hand right then and say "Can you explain step 2 again?"
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Answer When Called On</div>
+                        <div class="behavior-description">Even if you're not sure, respond with something like "I'm not sure, but I think..." or "Can you rephrase the question?"</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Teacher asks you a question, you say "I'm not totally sure, but I think it has to do with the main character's motivation?" instead of staying silent or saying "I don't know."
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Be Specific About Struggles</div>
+                        <div class="behavior-description">Say "I'm struggling with X" specifically rather than "I don't get it" or staying silent.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> "I understand how to set up the equation, but I'm stuck on how to solve for x when there are variables on both sides" NOT "I don't get this."
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Try First, Then Ask</div>
+                        <div class="behavior-description">Attempt the problem or task for at least 2 minutes before asking for help. Show your thinking.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Working on the problem, showing your steps even if wrong, then raising your hand and pointing to where you got stuck. "I tried doing this, but then I got stuck here."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Building Trust</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Communicate About Deadlines Early</div>
+                        <div class="behavior-description">If you won't finish homework, tell your teacher BEFORE it's due. Ask for what you need.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> On Tuesday you realize you can't finish the essay due Friday because you have 3 tests. You tell your teacher Tuesday or Wednesday: "I have 3 tests this week. Can I turn the essay in Monday instead?"
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Give Real Answers Sometimes</div>
+                        <div class="behavior-description">When teacher asks "How are you?", give an actual answer occasionally—not always just "fine."</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> "Actually kind of stressed about the game tonight" or "Pretty good, excited about the field trip" or "Tired, stayed up late studying."
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Accept Help When Offered</div>
+                        <div class="behavior-description">If teacher offers help time or tutoring, attend at least once in the first month.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Teacher says "I have office hours Tuesday and Thursday after school." You show up at least once, even if just for 10 minutes to ask one question.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Read Feedback</div>
+                        <div class="behavior-description">Actually read teacher feedback on assignments before filing or throwing them away.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Getting your graded essay back and reading the comments in the margins and at the end before putting it in your folder. Consider what the teacher wrote.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Classroom Citizenship</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Say Thank You</div>
+                        <div class="behavior-description">Thank your teacher when they help you individually or return graded work.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Teacher explains something one-on-one at your desk, you say "Thanks, that helps" or "Thank you" when they hand back your test.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Be Ready Quickly</div>
+                        <div class="behavior-description">Have materials out and be ready within 2 minutes of the bell ringing.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Bell rings. Within 2 minutes your notebook, pencil, and textbook are on your desk. You're looking at the board for instructions, not still digging in your backpack.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Participate Weekly</div>
+                        <div class="behavior-description">Make at least one classroom contribution per week (answer, question, or comment).</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> During discussion, you raise your hand and add one comment or answer one question voluntarily at some point during the week. Doesn't have to be every day.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Use Names</div>
+                        <div class="behavior-description">Use your teacher's name when addressing them respectfully.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> "Ms. Rodriguez, can you explain question 5?" or "Mr. Lee, I have a question about the reading" NOT just "Hey" or "Teacher."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DON'T SECTION -->
+        <div class="section dont-section">
+            <div class="section-title">✗ DON'T: Actions That Damage Relationships</div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Relationship Barriers</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Block Communication</div>
+                        <div class="behavior-description">Don't wear headphones/earbuds during instruction unless explicitly permitted by your teacher.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> When teacher is talking to the class or giving instructions, earbuds are out. Music during independent work is only okay if teacher says it's okay.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Turn Away</div>
+                        <div class="behavior-description">Don't turn your back, put your head down, or avoid eye contact when teacher addresses you individually.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If teacher walks over to help you or ask you a question, face them, look up, make eye contact even briefly. Don't put your hood up or turn away.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Use Complete Silence</div>
+                        <div class="behavior-description">Don't refuse to speak at all. "I'd rather not answer" is acceptable, total silence isn't.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If teacher asks you a question and you really don't want to answer, say "Can you come back to me?" or "I'd rather not answer." Saying nothing and staring makes things worse.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Start with Complaints</div>
+                        <div class="behavior-description">Don't enter class and immediately complain about the assignment or grading before even greeting the teacher.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> Walking in and immediately saying "This homework was so stupid" or "Why did I get a bad grade?" sets a negative tone. Greet first, then discuss concerns calmly later.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Communication Mistakes</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Hide Struggles Then Blame</div>
+                        <div class="behavior-description">Don't say "I'm fine" when you're clearly struggling, then blame the teacher later for not helping you.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If teacher asks "Do you understand?" and you say "Yeah I'm good" when you're actually confused, you can't later say "You never helped me." Be honest when asked.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Lie About Effort</div>
+                        <div class="behavior-description">Don't claim you "studied for hours" if you didn't. Be honest about your actual effort.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If you only studied 20 minutes and failed the test, don't tell teacher you studied for 3 hours. Say "I didn't study enough" or "I studied but I focused on the wrong things."
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Wait Until Failing</div>
+                        <div class="behavior-description">Don't wait until you have an F to speak up about not understanding material.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If you're confused in Week 2, speak up in Week 2. Don't wait until Week 8 when you're failing and then say "I never understood any of this."
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Interrupt</div>
+                        <div class="behavior-description">Don't interrupt the teacher mid-sentence. Raise your hand or wait for a pause.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> Teacher is explaining something. You have a question. Don't shout it out while they're talking. Raise your hand and wait, or wait until they finish the explanation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="behavior-category">
+                <div class="category-header">Counterproductive Behaviors</div>
+                <div class="behavior-list">
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Show Visible Frustration</div>
+                        <div class="behavior-description">Don't make disruptive noises (sighing, pen-clicking, talking to others) when teacher corrects your work.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> Teacher marks something wrong on your paper. Don't sigh loudly, slam your pencil down, or mutter to your neighbor. If you're frustrated, talk to teacher privately after class.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Mock Quietly</div>
+                        <div class="behavior-description">Don't mock the teacher's suggestions or instructions to classmates after the teacher walks away.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> Teacher gives you feedback and walks away. Don't turn to your friend and whisper "That's so dumb" or roll your eyes. Teacher usually notices, and it damages trust.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Refuse Reasonable Requests</div>
+                        <div class="behavior-description">Don't refuse to sit in an assigned seat or move when asked for a legitimate reason.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> If teacher assigns seats or asks you to move because you're off-task, comply. You can discuss it later privately, but refusing in the moment creates conflict.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-item">
+                        <div class="behavior-title">Don't Leave Without Acknowledging</div>
+                        <div class="behavior-description">Don't bolt out the door at the bell without any acknowledgment of the teacher.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">What this means:</span> Bell rings, you're packing up. Make brief eye contact with teacher, nod, or say "bye" or "see you tomorrow" as you leave. Don't just run out like teacher doesn't exist.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- QUICK REFERENCE -->
+        <div class="quick-reference">
+            <h2>Quick Daily Checklist - Did I Do These Today?</h2>
+            <div class="quick-list">
+                <div class="quick-item do">✓ Greeted teacher by name</div>
+                <div class="quick-item do">✓ Made eye contact at least once</div>
+                <div class="quick-item do">✓ Asked a question OR answered when called on</div>
+                <div class="quick-item do">✓ Had materials ready within 2 minutes</div>
+                <div class="quick-item do">✓ Tried before asking for help</div>
+                <div class="quick-item dont">✗ No earbuds during instruction</div>
+                <div class="quick-item dont">✗ No negative comments to classmates</div>
+                <div class="quick-item dont">✗ No lying about effort or understanding</div>
+                <div class="quick-item dont">✗ No bolting without acknowledgment</div>
+            </div>
+            
+            <p style="margin-top: 20px; font-weight: 600; color: #92400e;">
+                Remember: These aren't just "nice" behaviors. Research proves these actions directly improve your engagement and achievement. You have more control over your success than you think.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
