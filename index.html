@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Building Strong Teacher Relationships</title>
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -31,6 +33,7 @@
             box-shadow: 4px 0 20px rgba(0,0,0,0.1);
             position: fixed;
             top: 0;
+            left: 0;
             height: 100vh;
             overflow-y: auto;
             z-index: 100;
@@ -129,19 +132,19 @@
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 15px;  /* Minimal outer padding */
+            padding: 15px;
             max-width: none;
             margin-left: 280px;
         }
         
         .content-section {
             background: white;
-            padding: 40px 70px;  /* Generous internal padding, tight external */
+            padding: 40px 60px;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 20px;
             display: none;
-            width: 100%;  /* Force full width */
+            max-width: 100%;
         }
         
         .content-section.active {
@@ -281,6 +284,22 @@
             margin-bottom: 12px;
         }
         
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            background: white;
+            margin-bottom: 12px;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+        
         textarea {
             width: 100%;
             min-height: 70px;
@@ -335,7 +354,8 @@
             border-color: #cbd5e0;
         }
         
-        .scenario-option input[type="radio"] {
+        .scenario-option input[type="radio"],
+        .scenario-option input[type="checkbox"] {
             margin-top: 3px;
             cursor: pointer;
             width: 18px;
@@ -414,6 +434,15 @@
             box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
         }
         
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+        
         .btn-block {
             width: 100%;
         }
@@ -422,6 +451,7 @@
             display: flex;
             gap: 15px;
             margin-top: 25px;
+            flex-wrap: wrap;
         }
         
         /* Alert Boxes */
@@ -450,40 +480,36 @@
             color: #065f46;
         }
         
-        /* Lock Overlay */
-        .lock-overlay {
-            position: relative;
-        }
-        
-        .lock-overlay::after {
-            content: '🔒 Complete previous sections to unlock';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1.1em;
-            z-index: 10;
-        }
-        
-        .lock-overlay > * {
-            filter: blur(3px);
-            pointer-events: none;
-        }
-        
         /* Mobile Responsive */
-        /* Fix for Canvas iframe width */
         @media (max-width: 1200px) {
             .sidebar {
                 width: 220px;
             }
             
             .main-content {
-                padding: 30px 20px;
+                margin-left: 220px;
+                padding: 20px 15px;
+            }
+            
+            .content-section {
+                padding: 30px 40px;
+            }
+        }
+        
+        @media (max-width: 968px) {
+            .page-wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
             }
             
             .content-section {
@@ -491,26 +517,7 @@
             }
         }
         
-        @media (max-width: 968px) {
-            .sidebar {
-                width: 200px;
-            }
-            
-            .main-content {
-                padding: 20px 15px;
-            }
-            
-            .content-section {
-                padding: 20px 15px;
-            }
-        }
-        
-        /* Force proper scrolling in iframe */
-        body {
-            overflow-x: hidden;
-        }
-        
-        .page-wrapper {
+        body, .page-wrapper {
             overflow-x: hidden;
         }
     </style>
@@ -735,7 +742,12 @@
                 </div>
                 
                 <div class="alert alert-warning">
-                    <strong>This isn't graded.</strong> It's to make sure you actually think about this before the quiz. Type something (anything honest) in each box to unlock the next section.
+                    <strong>This generates a PDF you'll submit.</strong> Type your honest responses. Your teacher will use this to support your growth.
+                </div>
+                
+                <div class="reflection-box">
+                    <div class="reflection-prompt">Your Name:</div>
+                    <input type="text" id="studentName" placeholder="First and Last Name" oninput="checkReflections()">
                 </div>
                 
                 <div class="reflection-box">
@@ -751,11 +763,12 @@
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="btn btn-primary btn-block" id="reflectBtn" disabled onclick="completeSection('reflect', 'practice')">Continue to Practice →</button>
+                    <button class="btn btn-success" id="generatePDFBtn" disabled onclick="generatePDF()">Generate My Plan (PDF)</button>
+                    <button class="btn btn-primary" id="reflectBtn" disabled onclick="completeSection('reflect', 'practice')">Continue to Practice →</button>
                 </div>
                 
                 <div class="alert alert-info" style="margin-top: 20px;">
-                    <strong>Tip:</strong> Once you type something in both boxes, the button will unlock.
+                    <strong>Instructions:</strong> Fill in all three boxes above. Click "Generate My Plan" to create your PDF, then download and submit it through Canvas. After submitting, click "Continue to Practice" to move forward.
                 </div>
             </div>
             
@@ -767,86 +780,14 @@
                 </div>
                 
                 <div class="alert alert-info">
-                    <strong>Read each scenario and pick the best answer.</strong> After you answer all three, you can check your work and move on.
+                    <strong>Read each scenario and pick the best answer.</strong> You'll see 3 random scenarios from a bank of 10. After answering, check your work. You can reset and try different scenarios.
                 </div>
                 
-                <div class="scenario-card">
-                    <div class="scenario-text">
-                        <strong>Scenario 1:</strong> It's Tuesday. You have 3 tests Friday and won't finish the history essay that's also due Friday. What should you do?
-                    </div>
-                    <div class="scenario-options" id="options1">
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario1" value="a">
-                            <span>Just don't do it and explain after it's due</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario1" value="b">
-                            <span>Stay up all night to finish everything</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario1" value="c" data-correct="true">
-                            <span>Tell your teacher Tuesday or Wednesday and ask if you can turn it in Monday instead</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario1" value="d">
-                            <span>Copy someone else's essay</span>
-                        </label>
-                    </div>
-                    <div class="scenario-feedback" id="feedback1"></div>
-                </div>
-                
-                <div class="scenario-card">
-                    <div class="scenario-text">
-                        <strong>Scenario 2:</strong> The teacher is explaining a math problem. You're confused at step 2. What's the BEST thing to do?
-                    </div>
-                    <div class="scenario-options" id="options2">
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario2" value="a">
-                            <span>Wait until after class to ask</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario2" value="b">
-                            <span>Just copy what's on the board and figure it out later</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario2" value="c" data-correct="true">
-                            <span>Raise your hand right then and say "Can you explain step 2 again?"</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario2" value="d">
-                            <span>Ask your friend to explain it</span>
-                        </label>
-                    </div>
-                    <div class="scenario-feedback" id="feedback2"></div>
-                </div>
-                
-                <div class="scenario-card">
-                    <div class="scenario-text">
-                        <strong>Scenario 3:</strong> Your teacher just marked something wrong on your paper. You're frustrated. What should you NOT do?
-                    </div>
-                    <div class="scenario-options" id="options3">
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario3" value="a">
-                            <span>Take a breath and ask the teacher to explain after class</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario3" value="b" data-correct="true">
-                            <span>Sigh loudly, slam your pencil down, and mutter to your neighbor</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario3" value="c">
-                            <span>Look at what you got wrong and try to understand the mistake</span>
-                        </label>
-                        <label class="scenario-option">
-                            <input type="radio" name="scenario3" value="d">
-                            <span>Make a note to ask about it during help time</span>
-                        </label>
-                    </div>
-                    <div class="scenario-feedback" id="feedback3"></div>
-                </div>
+                <div id="scenarioContainer"></div>
                 
                 <div class="action-buttons">
                     <button class="btn btn-primary" onclick="checkScenarios()">Check My Answers</button>
+                    <button class="btn btn-secondary" onclick="resetScenarios()">Try Different Scenarios</button>
                     <button class="btn btn-success" id="practiceCompleteBtn" disabled onclick="completeSection('practice', 'quiz')">Continue to Quiz →</button>
                 </div>
             </div>
@@ -860,13 +801,13 @@
                 
                 <div class="callout">
                     <h3>You're Ready</h3>
-                    <p>You've read the behaviors, thought about your own habits, and practiced with scenarios.</p>
+                    <p>You've read the behaviors, created your action plan, and practiced with scenarios.</p>
                     <p>The quiz has questions about the research, questions where you identify behaviors, and scenarios where you apply what you learned.</p>
                     <p><strong>You can reference the guide if needed, but try from memory first.</strong></p>
                 </div>
                 
                 <div class="alert alert-success">
-                    <strong>After you finish:</strong> Pick that ONE behavior you said you'd try. Actually do it tomorrow. See what happens.
+                    <strong>After you finish:</strong> Actually try that ONE behavior you committed to. See what happens.
                 </div>
                 
                 <div class="action-buttons">
@@ -880,81 +821,255 @@
         // Track completed sections
         const completed = new Set(['intro']);
         
+        // Scenario bank - 10 scenarios
+        const scenarioBank = [
+            {
+                text: "It's Tuesday. You have 3 tests Friday and won't finish the history essay that's also due Friday. What should you do?",
+                options: [
+                    { text: "Just don't do it and explain after it's due", correct: false, feedback: "Waiting until after creates conflict. Teachers appreciate proactive communication. This damages trust because it looks like you didn't care enough to ask ahead." },
+                    { text: "Stay up all night to finish everything", correct: false, feedback: "Burning out helps no one. You'll be exhausted for your tests and the essay will suffer. Teachers would rather you communicate and get an extension than submit poor work." },
+                    { text: "Tell your teacher Tuesday or Wednesday and ask if you can turn it in Monday instead", correct: true, feedback: "Perfect. You're communicating early (not the night before), being specific about the conflict, and proposing a solution. This shows responsibility and respect for deadlines." },
+                    { text: "Copy someone else's essay", correct: false, feedback: "This is academic dishonesty. You'll face serious consequences if caught, and it destroys any trust with your teacher. It also means you learn nothing." }
+                ]
+            },
+            {
+                text: "The teacher is explaining a math problem. You're confused at step 2. What's the BEST thing to do?",
+                options: [
+                    { text: "Wait until after class to ask", correct: false, feedback: "By waiting, you miss the next 30 minutes of instruction built on step 2. You fall further behind. Teachers want you to ask in the moment so you stay on track." },
+                    { text: "Just copy what's on the board and figure it out later", correct: false, feedback: "You're creating more work for yourself and probably won't figure it out alone. Plus, you've signaled to the teacher that you understand when you don't." },
+                    { text: "Raise your hand right then and say 'Can you explain step 2 again?'", correct: true, feedback: "Exactly right. You're asking early, being specific about what you don't understand, and giving the teacher a chance to help you stay on track. Other students are probably confused too." },
+                    { text: "Ask your friend to explain it", correct: false, feedback: "Your friend might not understand it either, or might explain it wrong. The teacher is the expert. This also means the teacher doesn't know you're confused." }
+                ]
+            },
+            {
+                text: "Your teacher just marked something wrong on your paper. You're frustrated. What should you NOT do?",
+                options: [
+                    { text: "Take a breath and ask the teacher to explain after class", correct: false, feedback: "This is actually a good response, not what you should avoid. Taking time to calm down and then seeking clarification shows maturity." },
+                    { text: "Sigh loudly, slam your pencil down, and mutter to your neighbor", correct: true, feedback: "Correct—this is what NOT to do. Visible frustration disrupts class, disrespects the teacher, and makes them less likely to want to help you. It damages the relationship immediately." },
+                    { text: "Look at what you got wrong and try to understand the mistake", correct: false, feedback: "This is a productive response, not something to avoid. Reviewing your errors is how you learn." },
+                    { text: "Make a note to ask about it during help time", correct: false, feedback: "This is another good response. You're being proactive about getting help without disrupting class." }
+                ]
+            },
+            {
+                text: "You walk into class and see a new seating chart. Your teacher asks you to sit in a different seat than where you were heading. What should you do?",
+                options: [
+                    { text: "Refuse and say 'I'm not sitting there'", correct: false, feedback: "Refusing a reasonable request creates immediate conflict and makes you look immature. Teachers will be less flexible with you in the future if you can't handle simple changes." },
+                    { text: "Sit in the assigned seat, then talk to the teacher privately after class if you have concerns", correct: true, feedback: "Right approach. Comply with the reasonable request in the moment, maintaining respect. If there's a real issue with the seat, discuss it privately and calmly later." },
+                    { text: "Roll your eyes but sit down", correct: false, feedback: "The eye roll damages the relationship even if you comply. It signals disrespect and makes future interactions more tense. Just sit down without the attitude." },
+                    { text: "Argue about it in front of the whole class", correct: false, feedback: "Public arguments put the teacher in a position where they can't back down without losing authority. This escalates unnecessarily. Always handle concerns privately." }
+                ]
+            },
+            {
+                text: "The teacher asks 'How are you?' as you walk in. You're actually stressed about a game tonight. What should you say?",
+                options: [
+                    { text: "Just say 'fine' like always", correct: false, feedback: "While not wrong, this is a missed opportunity. Occasionally giving real answers helps build connection. You don't have to share everything, but 'fine' every single time keeps the relationship surface-level." },
+                    { text: "'Actually kind of stressed about the game tonight'", correct: true, feedback: "Good choice. It's brief, honest, and gives the teacher a glimpse into your life. This helps them see you as a person, not just a student, which strengthens the relationship." },
+                    { text: "Ignore the question and walk past", correct: false, feedback: "Ignoring the teacher's greeting signals disrespect or disengagement. Even a quick 'good' while making eye contact is better than nothing." },
+                    { text: "Launch into a 5-minute explanation of everything going on", correct: false, feedback: "Too much. The teacher is greeting you, not asking for a full therapy session. Keep it brief—1 sentence max. Save long conversations for appropriate times." }
+                ]
+            },
+            {
+                text: "You've been confused about the unit for 3 weeks but kept saying you understood. Now you're failing. What should you do?",
+                options: [
+                    { text: "Keep pretending and hope you can catch up on your own", correct: false, feedback: "You're 3 weeks behind. Hoping won't help. The hole is too deep to climb out alone, and you're wasting time you could spend actually learning." },
+                    { text: "Tell the teacher 'I've been confused since Week 1. Can we make a plan to catch me up?'", correct: true, feedback: "Best option. You're being honest (even though it's hard), taking responsibility, and asking for help. Teachers respect this and will work with you to create a catch-up plan." },
+                    { text: "Blame the teacher for not noticing you were struggling", correct: false, feedback: "You said you understood when asked. The teacher can't read minds. Blaming damages the relationship and prevents you from getting help. Own your part." },
+                    { text: "Just accept the failing grade and move on", correct: false, feedback: "Giving up helps no one. Many teachers will help you recover if you show effort and honesty. At minimum, you need to understand this material for future classes." }
+                ]
+            },
+            {
+                text: "Bell rings. You're packing up to leave. The teacher is standing at the door. What should you do?",
+                options: [
+                    { text: "Make brief eye contact, nod, or say 'bye' as you leave", correct: true, feedback: "Perfect. This small acknowledgment maintains the relationship. It takes 1 second and signals respect. It's the difference between treating the teacher like furniture vs. like a person." },
+                    { text: "Run out without looking at the teacher", correct: false, feedback: "It's rude and signals that you see the teacher as irrelevant. Even when you're in a hurry, a quick nod or 'bye' maintains basic respect." },
+                    { text: "Stop and have a long conversation even though you'll be late to your next class", correct: false, feedback: "No need to go overboard. A brief acknowledgment is enough. Save longer conversations for appropriate times when neither of you is rushed." },
+                    { text: "Wait for the teacher to acknowledge you first", correct: false, feedback: "Don't wait for them to greet you—take the initiative. Greeting shows respect and effort. Waiting puts all the relationship work on the teacher." }
+                ]
+            },
+            {
+                text: "Your teacher offers help time after school on Tuesdays and Thursdays. You're struggling in the class. What should you do?",
+                options: [
+                    { text: "Never go because it's awkward", correct: false, feedback: "The awkwardness lasts 30 seconds. Struggling in the class lasts all semester. Teachers offer help time because they want to help—use it. Going once shows you care." },
+                    { text: "Show up at least once, even if just for 10 minutes to ask one question", correct: true, feedback: "Right move. You don't have to go every week, but showing up once demonstrates effort and willingness to get help. It builds the relationship and shows you take the class seriously." },
+                    { text: "Tell everyone the teacher's help time is useless even though you've never gone", correct: false, feedback: "Talking negatively about something you haven't even tried makes you look lazy and disrespectful. If you go and it genuinely doesn't help, then you can have an opinion." },
+                    { text: "Only go if the teacher personally invites you", correct: false, feedback: "The offer itself IS the invitation. Teachers can't personally invite every struggling student—they'd spend all day doing nothing else. The open offer means you're welcome." }
+                ]
+            },
+            {
+                text: "You get your graded essay back with comments in the margins. What should you do?",
+                options: [
+                    { text: "Look at the grade, then throw it away without reading the comments", correct: false, feedback: "You're wasting the teacher's time and your own learning opportunity. The comments show you specifically how to improve. Ignoring them means you'll make the same mistakes next time." },
+                    { text: "Read the comments to understand what to improve next time", correct: true, feedback: "Exactly. The grade is just a number. The comments are the actual learning tool. Reading them shows you respect the teacher's effort and want to improve." },
+                    { text: "Only read the comments if you got a bad grade", correct: false, feedback: "Even if you got an A, the comments show you how to get better. Teachers spend time on feedback for everyone—reading it regardless of grade shows respect for that effort." },
+                    { text: "Argue about every comment the teacher made", correct: false, feedback: "If you have a genuine question about one specific comment, that's fine. But arguing about everything makes you look defensive and unwilling to learn. Pick your battles." }
+                ]
+            },
+            {
+                text: "You're working on classwork. You tried for 1 minute and you're stuck. What should you do?",
+                options: [
+                    { text: "Immediately raise your hand and ask for help", correct: false, feedback: "You haven't tried long enough. Teachers want to see some effort first—at least 2-3 minutes of genuine thinking. Show your work and where you got stuck." },
+                    { text: "Give up and put your head down", correct: false, feedback: "This signals you don't care and makes teachers less likely to help you. Struggle is part of learning—push through a bit before asking." },
+                    { text: "Try for 2-3 minutes, show your thinking, then raise your hand and point to where you got stuck", correct: true, feedback: "Perfect. You've made a genuine effort, you can show your thinking process, and you're being specific about where you need help. Teachers appreciate this approach." },
+                    { text: "Keep struggling silently for 30 minutes", correct: false, feedback: "At some point, you need to ask. If you're stuck for more than 5 minutes despite real effort, raise your hand. Teachers can't help if they don't know you're stuck." }
+                ]
+            }
+        ];
+        
+        let currentScenarios = [];
+        let scenariosChecked = false;
+        
         function navigateTo(section) {
             const navItem = document.querySelector(`[data-section="${section}"]`);
             
-            // Check if section is locked
             if (navItem.classList.contains('locked')) {
                 return;
             }
             
-            // Hide all sections
             document.querySelectorAll('.content-section').forEach(s => {
                 s.classList.remove('active');
             });
             
-            // Show target section
             document.getElementById(section).classList.add('active');
             
-            // Update nav active state
             document.querySelectorAll('.nav-section').forEach(n => {
                 n.classList.remove('active');
             });
             navItem.classList.add('active');
             
-            // Scroll to top
             window.scrollTo(0, 0);
         }
         
         function completeSection(current, next) {
-            // Mark current as completed
             completed.add(current);
             const currentNav = document.querySelector(`[data-section="${current}"]`);
             currentNav.classList.add('completed');
             currentNav.classList.remove('active');
             
-            // Unlock next section
             const nextNav = document.querySelector(`[data-section="${next}"]`);
             nextNav.classList.remove('locked');
             nextNav.classList.add('active');
             
-            // Navigate to next
             navigateTo(next);
         }
         
         // Reflection validation
         function checkReflections() {
+            const name = document.getElementById('studentName').value.trim();
             const text1 = document.getElementById('reflect1').value.trim();
             const text2 = document.getElementById('reflect2').value.trim();
-            const btn = document.getElementById('reflectBtn');
+            const pdfBtn = document.getElementById('generatePDFBtn');
+            const continueBtn = document.getElementById('reflectBtn');
             
-            // Require at least 10 characters in each to prevent single-letter bypassing
-            if (text1.length >= 10 && text2.length >= 10) {
-                btn.disabled = false;
+            if (name.length >= 3 && text1.length >= 10 && text2.length >= 10) {
+                pdfBtn.disabled = false;
+                continueBtn.disabled = false;
             } else {
-                btn.disabled = true;
+                pdfBtn.disabled = true;
+                continueBtn.disabled = true;
             }
         }
         
-        // Scenario checking
-        let scenariosChecked = false;
+        // PDF Generation
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const name = document.getElementById('studentName').value.trim();
+            const behavior = document.getElementById('reflect1').value.trim();
+            const dont = document.getElementById('reflect2').value.trim();
+            const date = new Date().toLocaleDateString();
+            
+            // Title
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('My Teacher Relationship Action Plan', 105, 20, { align: 'center' });
+            
+            // Student info
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Name: ${name}`, 20, 35);
+            doc.text(`Date: ${date}`, 20, 42);
+            
+            // Question 1
+            doc.setFont(undefined, 'bold');
+            doc.text('1. One DO behavior I will try tomorrow:', 20, 55);
+            doc.setFont(undefined, 'normal');
+            const behavior1Lines = doc.splitTextToSize(behavior, 170);
+            doc.text(behavior1Lines, 20, 63);
+            
+            // Question 2
+            const q2Y = 63 + (behavior1Lines.length * 7) + 10;
+            doc.setFont(undefined, 'bold');
+            doc.text('2. One DON\'T behavior I did this week:', 20, q2Y);
+            doc.setFont(undefined, 'normal');
+            const behavior2Lines = doc.splitTextToSize(dont, 170);
+            doc.text(behavior2Lines, 20, q2Y + 8);
+            
+            // Footer
+            const footerY = q2Y + (behavior2Lines.length * 7) + 20;
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            doc.text('Submit this plan to your teacher through Canvas.', 105, footerY, { align: 'center' });
+            
+            // Save
+            doc.save(`${name.replace(/\s+/g, '_')}_Teacher_Relationship_Plan.pdf`);
+            
+            alert('PDF generated! Download it and submit through Canvas, then click "Continue to Practice."');
+        }
+        
+        // Initialize scenarios
+        function initScenarios() {
+            // Randomly select 3 scenarios
+            const shuffled = [...scenarioBank].sort(() => Math.random() - 0.5);
+            currentScenarios = shuffled.slice(0, 3);
+            renderScenarios();
+        }
+        
+        function renderScenarios() {
+            const container = document.getElementById('scenarioContainer');
+            container.innerHTML = '';
+            
+            currentScenarios.forEach((scenario, index) => {
+                const card = document.createElement('div');
+                card.className = 'scenario-card';
+                card.innerHTML = `
+                    <div class="scenario-text">
+                        <strong>Scenario ${index + 1}:</strong> ${scenario.text}
+                    </div>
+                    <div class="scenario-options" id="options${index}">
+                        ${scenario.options.map((opt, optIndex) => `
+                            <label class="scenario-option">
+                                <input type="radio" name="scenario${index}" value="${optIndex}" ${opt.correct ? 'data-correct="true"' : ''}>
+                                <span>${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="scenario-feedback" id="feedback${index}"></div>
+                `;
+                container.appendChild(card);
+            });
+            
+            scenariosChecked = false;
+            document.getElementById('practiceCompleteBtn').disabled = true;
+        }
         
         function checkScenarios() {
-            let allCorrect = true;
+            scenariosChecked = true;
             
-            for (let i = 1; i <= 3; i++) {
-                const selected = document.querySelector(`input[name="scenario${i}"]:checked`);
-                const feedback = document.getElementById(`feedback${i}`);
-                const options = document.querySelectorAll(`input[name="scenario${i}"]`);
+            currentScenarios.forEach((scenario, index) => {
+                const selected = document.querySelector(`input[name="scenario${index}"]:checked`);
+                const feedback = document.getElementById(`feedback${index}`);
+                const options = document.querySelectorAll(`input[name="scenario${index}"]`);
                 
                 if (!selected) {
                     feedback.className = 'scenario-feedback show incorrect';
                     feedback.textContent = '⚠️ Please select an answer.';
-                    allCorrect = false;
-                    continue;
+                    return;
                 }
                 
-                const isCorrect = selected.dataset.correct === 'true';
+                const selectedIndex = parseInt(selected.value);
+                const selectedOption = scenario.options[selectedIndex];
+                const isCorrect = selectedOption.correct;
                 const selectedLabel = selected.closest('.scenario-option');
                 
                 // Remove previous styling
@@ -965,22 +1080,33 @@
                 if (isCorrect) {
                     selectedLabel.classList.add('correct');
                     feedback.className = 'scenario-feedback show correct';
-                    feedback.textContent = '✓ Correct! This behavior builds relationships.';
+                    feedback.textContent = `✓ ${selectedOption.feedback}`;
                 } else {
                     selectedLabel.classList.add('incorrect');
-                    const correctOption = document.querySelector(`input[name="scenario${i}"][data-correct="true"]`);
-                    correctOption.closest('.scenario-option').classList.add('correct');
+                    // Highlight correct answer
+                    scenario.options.forEach((opt, optIndex) => {
+                        if (opt.correct) {
+                            const correctInput = document.querySelector(`input[name="scenario${index}"][value="${optIndex}"]`);
+                            correctInput.closest('.scenario-option').classList.add('correct');
+                        }
+                    });
                     feedback.className = 'scenario-feedback show incorrect';
-                    feedback.textContent = '✗ Not quite. Look at the highlighted correct answer.';
-                    allCorrect = false;
+                    feedback.textContent = `✗ ${selectedOption.feedback}`;
                 }
-            }
+            });
             
-            scenariosChecked = true;
-            
-            // Enable continue button regardless (they tried)
             document.getElementById('practiceCompleteBtn').disabled = false;
         }
+        
+        function resetScenarios() {
+            initScenarios();
+            window.scrollTo({ top: document.getElementById('practice').offsetTop - 100, behavior: 'smooth' });
+        }
+        
+        // Initialize scenarios when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initScenarios();
+        });
     </script>
 </body>
 </html>
