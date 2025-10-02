@@ -129,17 +129,18 @@
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 40px;
+            padding: 15px;  /* Minimal outer padding */
             max-width: none;
         }
         
         .content-section {
             background: white;
-            padding: 35px;
+            padding: 40px 70px;  /* Generous internal padding, tight external */
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             display: none;
+            width: 100%;  /* Force full width */
         }
         
         .content-section.active {
