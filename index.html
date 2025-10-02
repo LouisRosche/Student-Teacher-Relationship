@@ -474,32 +474,42 @@
         }
         
         /* Mobile Responsive */
-        @media (max-width: 968px) {
-            .page-wrapper {
-                flex-direction: column;
-            }
-            
+        /* Fix for Canvas iframe width */
+        @media (max-width: 1200px) {
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            
-            .sidebar-header {
-                padding: 20px;
-            }
-            
-            .nav-section {
-                padding: 15px 20px;
+                width: 220px;
             }
             
             .main-content {
-                padding: 20px;
+                padding: 30px 20px;
             }
             
             .content-section {
                 padding: 25px 20px;
             }
+        }
+        
+        @media (max-width: 968px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .content-section {
+                padding: 20px 15px;
+            }
+        }
+        
+        /* Force proper scrolling in iframe */
+        body {
+            overflow-x: hidden;
+        }
+        
+        .page-wrapper {
+            overflow-x: hidden;
         }
     </style>
 </head>
