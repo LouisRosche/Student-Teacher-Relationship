@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Guide: Building Strong Teacher Relationships</title>
+    <title>Building Strong Teacher Relationships</title>
     <style>
         * {
             margin: 0;
@@ -12,57 +12,178 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
             line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 4px solid #667eea;
-        }
-        
-        .header h1 {
             color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            min-height: 100vh;
         }
         
-        .header .subtitle {
-            color: #667eea;
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 15px;
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
         }
         
-        .why-box {
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 25px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        
+        .nav-section {
+            padding: 12px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .nav-section:hover:not(.locked) {
+            background: #f7fafc;
+        }
+        
+        .nav-section.active {
+            background: #eef2ff;
+            border-left: 4px solid #667eea;
+        }
+        
+        .nav-section.completed {
+            background: #d1fae5;
+        }
+        
+        .nav-section.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+        
+        .nav-section .nav-icon {
+            background: #e2e8f0;
+            color: #718096;
+        }
+        
+        .nav-section.active .nav-icon {
+            background: #667eea;
+            color: white;
+        }
+        
+        .nav-section.completed .nav-icon {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav-section.locked .nav-icon::after {
+            content: '🔒';
+            font-size: 14px;
+        }
+        
+        .nav-text {
+            flex: 1;
+        }
+        
+        .nav-title {
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        
+        .nav-subtitle {
+            font-size: 0.8em;
+            color: #718096;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
+            display: none;
         }
         
-        .why-box h2 {
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            margin-bottom: 25px;
+        }
+        
+        .section-header h1 {
+            font-size: 2em;
             margin-bottom: 10px;
-            font-size: 1.4em;
+            color: #2d3748;
         }
         
-        .why-box p {
-            font-size: 1.05em;
-            line-height: 1.8;
+        .section-header .subtitle {
+            color: #667eea;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .callout {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .callout h3 {
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+        
+        .callout p {
+            line-height: 1.7;
+            margin-bottom: 10px;
         }
         
         .stats {
@@ -70,6 +191,7 @@
             justify-content: space-around;
             margin: 20px 0;
             flex-wrap: wrap;
+            gap: 12px;
         }
         
         .stat-box {
@@ -77,88 +199,45 @@
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            min-width: 200px;
-            margin: 10px;
+            min-width: 140px;
         }
         
         .stat-number {
-            font-size: 2.5em;
+            font-size: 2em;
             font-weight: bold;
         }
         
         .stat-label {
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
         
-        .section {
-            margin-bottom: 40px;
-        }
-        
-        .section-title {
-            font-size: 2em;
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            color: white;
-        }
-        
-        .do-section .section-title {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        
-        .dont-section .section-title {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        }
-        
-        .behavior-category {
-            margin-bottom: 30px;
-        }
-        
-        .category-header {
-            font-size: 1.4em;
-            color: #2d3748;
-            margin-bottom: 15px;
-            padding-left: 15px;
-            border-left: 5px solid #667eea;
-            font-weight: 600;
-        }
-        
-        .behavior-list {
+        .behavior-grid {
             display: grid;
             gap: 15px;
+            margin-top: 20px;
         }
         
-        .behavior-item {
+        .behavior-card {
             background: #f7fafc;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
         }
         
-        .behavior-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .do-section .behavior-item {
-            border-left-color: #10b981;
-        }
-        
-        .dont-section .behavior-item {
+        .behavior-card.dont {
             border-left-color: #ef4444;
         }
         
         .behavior-title {
             font-weight: 700;
-            font-size: 1.15em;
+            font-size: 1.05em;
             margin-bottom: 8px;
             color: #2d3748;
         }
         
         .behavior-description {
             color: #4a5568;
-            font-size: 1em;
+            font-size: 0.95em;
             margin-bottom: 10px;
         }
         
@@ -168,8 +247,8 @@
             border-radius: 6px;
             font-style: italic;
             color: #718096;
-            margin-top: 8px;
             border-left: 3px solid #cbd5e0;
+            font-size: 0.9em;
         }
         
         .example-label {
@@ -178,362 +257,718 @@
             font-style: normal;
         }
         
-        .quick-reference {
+        /* Reflection Inputs */
+        .reflection-box {
             background: #fef3c7;
             border: 3px solid #f59e0b;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 40px;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
         
-        .quick-reference h2 {
+        .reflection-prompt {
+            font-weight: 700;
             color: #92400e;
-            margin-bottom: 15px;
-            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-size: 1.05em;
         }
         
-        .quick-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        .reflection-hint {
+            font-size: 0.9em;
+            color: #78350f;
+            margin-bottom: 12px;
         }
         
-        .quick-item {
-            background: white;
+        textarea {
+            width: 100%;
+            min-height: 70px;
             padding: 12px;
-            border-radius: 6px;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+            background: white;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+        
+        /* Scenario Practice */
+        .scenario-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-text {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .scenario-options {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .scenario-option {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 14px;
+            background: #f7fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .scenario-option:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .scenario-option input[type="radio"] {
+            margin-top: 3px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .scenario-option.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .scenario-option.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        
+        .scenario-feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95em;
             font-weight: 600;
-            color: #2d3748;
+            display: none;
         }
         
-        .quick-item.do {
+        .scenario-feedback.show {
+            display: block;
+        }
+        
+        .scenario-feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .scenario-feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1em;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        /* Alert Boxes */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        
+        .alert-info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
             border-left: 4px solid #10b981;
+            color: #065f46;
         }
         
-        .quick-item.dont {
-            border-left: 4px solid #ef4444;
+        /* Lock Overlay */
+        .lock-overlay {
+            position: relative;
         }
         
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            
-            .container {
-                box-shadow: none;
-                padding: 20px;
-            }
-            
-            .behavior-item {
-                page-break-inside: avoid;
-            }
+        .lock-overlay::after {
+            content: '🔒 Complete previous sections to unlock';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            z-index: 10;
         }
         
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .stats {
+        .lock-overlay > * {
+            filter: blur(3px);
+            pointer-events: none;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .page-wrapper {
                 flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .sidebar-header {
+                padding: 20px;
+            }
+            
+            .nav-section {
+                padding: 15px 20px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .content-section {
+                padding: 25px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Your Guide to Building Strong Teacher Relationships</h1>
-            <div class="subtitle">Actions That Lead to Your Success</div>
-        </div>
-        
-        <div class="why-box">
-            <h2>Why This Matters to YOU</h2>
-            <p>Research tracking over 2.6 million students across 70+ years shows that students who have positive relationships with their teachers are significantly more engaged in learning and achieve better grades. The effect is so strong that researchers measured it at 0.72 on the effect size scale—that's considered highly significant. Translation: <strong>How you interact with your teachers directly impacts your learning and grades.</strong></p>
+    <div class="page-wrapper">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Your Progress</h2>
+                <p>Complete each section to unlock the next</p>
+            </div>
             
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-number">2.6M+</div>
-                    <div class="stat-label">Students Studied</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">0.72</div>
-                    <div class="stat-label">Effect Size (Highly Significant)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">70+</div>
-                    <div class="stat-label">Years of Research</div>
+            <div class="nav-section active" data-section="intro" onclick="navigateTo('intro')">
+                <div class="nav-icon">1</div>
+                <div class="nav-text">
+                    <div class="nav-title">Start Here</div>
+                    <div class="nav-subtitle">Why this matters</div>
                 </div>
             </div>
             
-            <p style="margin-top: 15px;"><strong>Bottom Line:</strong> Students who actively build positive relationships with teachers learn more, participate more, and perform better. This guide shows you exactly HOW to do that with specific, observable behaviors you can start TODAY.</p>
+            <div class="nav-section locked" data-section="guide" onclick="navigateTo('guide')">
+                <div class="nav-icon">2</div>
+                <div class="nav-text">
+                    <div class="nav-title">The Guide</div>
+                    <div class="nav-subtitle">DO and DON'T behaviors</div>
+                </div>
+            </div>
+            
+            <div class="nav-section locked" data-section="reflect" onclick="navigateTo('reflect')">
+                <div class="nav-icon">3</div>
+                <div class="nav-text">
+                    <div class="nav-title">Your Plan</div>
+                    <div class="nav-subtitle">Quick self-check</div>
+                </div>
+            </div>
+            
+            <div class="nav-section locked" data-section="practice" onclick="navigateTo('practice')">
+                <div class="nav-icon">4</div>
+                <div class="nav-text">
+                    <div class="nav-title">Practice</div>
+                    <div class="nav-subtitle">Try some scenarios</div>
+                </div>
+            </div>
+            
+            <div class="nav-section locked" data-section="quiz" onclick="navigateTo('quiz')">
+                <div class="nav-icon">✓</div>
+                <div class="nav-text">
+                    <div class="nav-title">Knowledge Check</div>
+                    <div class="nav-subtitle">Show what you learned</div>
+                </div>
+            </div>
         </div>
         
-        <!-- DO SECTION -->
-        <div class="section do-section">
-            <div class="section-title">✓ DO: Actions That Build Strong Relationships</div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Engaging with Teachers</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
-                        <div class="behavior-title">Greet Your Teacher</div>
-                        <div class="behavior-description">Make eye contact and say "hi" or "good morning" when you enter the classroom.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Walking in, making eye contact with teacher at door, saying "Good morning, Ms. Chen" or just "Hey" with a nod.
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Section 1: Intro -->
+            <div class="content-section active" id="intro">
+                <div class="section-header">
+                    <h1>Building Strong Teacher Relationships</h1>
+                    <div class="subtitle">Real Actions That Lead to Your Success</div>
+                </div>
+                
+                <div class="callout">
+                    <h3>Why This Actually Matters to YOU</h3>
+                    <p>Look, I know you've heard "be respectful" a million times. This is different.</p>
+                    <p>Researchers tracked over <strong>2.6 million students</strong> across <strong>70+ years</strong> and found something clear: students who build positive relationships with their teachers don't just feel better in class—they actually learn more and get better grades.</p>
+                    <p>The effect is so strong they measured it at <strong>0.72</strong>, which in research terms means <strong>this is real and it matters</strong>.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-number">2.6M+</div>
+                            <div class="stat-label">Students Studied</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">0.72</div>
+                            <div class="stat-label">Effect Size</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">70+</div>
+                            <div class="stat-label">Years of Research</div>
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
+                    <p><strong>Translation:</strong> How you interact with your teachers directly impacts YOUR learning and YOUR grades.</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>What you'll do:</strong> Read specific behaviors → Think about your own habits → Practice with scenarios → Take the knowledge check. Takes about 25 minutes total.
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-block" onclick="completeSection('intro', 'guide')">Let's Go →</button>
+                </div>
+            </div>
+            
+            <!-- Section 2: The Guide -->
+            <div class="content-section" id="guide">
+                <div class="section-header">
+                    <h1>The Behaviors: DO and DON'T</h1>
+                    <div class="subtitle">These are specific, observable actions you can control</div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <strong>Read through all the DO and DON'T behaviors below.</strong> Pay attention to the examples—they show you exactly what each behavior looks like in real situations.
+                </div>
+                
+                <h2 style="color: #10b981; margin-top: 30px; margin-bottom: 15px;">✓ DO: Actions That Build Relationships</h2>
+                
+                <div class="behavior-grid">
+                    <div class="behavior-card">
+                        <div class="behavior-title">Greet Your Teacher</div>
+                        <div class="behavior-description">Make eye contact and say "hi" or "good morning" when you enter.</div>
+                        <div class="behavior-example">
+                            <span class="example-label">Looks like:</span> Walking in, making eye contact, saying "Good morning, Ms. Chen" or just "Hey" with a nod.
+                        </div>
+                    </div>
+                    
+                    <div class="behavior-card">
                         <div class="behavior-title">Ask Questions Early</div>
-                        <div class="behavior-description">Raise your hand or use the agreed signal when you don't understand—within 5 minutes of instruction, not after class.</div>
+                        <div class="behavior-description">Raise your hand when you don't understand—within 5 minutes of instruction, not after class.</div>
                         <div class="behavior-example">
                             <span class="example-label">Looks like:</span> Teacher explains a math problem, you're confused on step 2, you raise your hand right then and say "Can you explain step 2 again?"
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
+                    <div class="behavior-card">
                         <div class="behavior-title">Answer When Called On</div>
-                        <div class="behavior-description">Even if you're not sure, respond with something like "I'm not sure, but I think..." or "Can you rephrase the question?"</div>
+                        <div class="behavior-description">Even if you're not sure, respond with "I'm not sure, but I think..." or "Can you rephrase?"</div>
                         <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Teacher asks you a question, you say "I'm not totally sure, but I think it has to do with the main character's motivation?" instead of staying silent or saying "I don't know."
+                            <span class="example-label">Looks like:</span> "I'm not totally sure, but I think it has to do with the main character's motivation?" instead of silence.
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
+                    <div class="behavior-card">
                         <div class="behavior-title">Be Specific About Struggles</div>
-                        <div class="behavior-description">Say "I'm struggling with X" specifically rather than "I don't get it" or staying silent.</div>
+                        <div class="behavior-description">Say "I'm struggling with X" specifically rather than "I don't get it."</div>
                         <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> "I understand how to set up the equation, but I'm stuck on how to solve for x when there are variables on both sides" NOT "I don't get this."
+                            <span class="example-label">Looks like:</span> "I understand how to set up the equation, but I'm stuck on solving for x when there are variables on both sides."
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
-                        <div class="behavior-title">Try First, Then Ask</div>
-                        <div class="behavior-description">Attempt the problem or task for at least 2 minutes before asking for help. Show your thinking.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Working on the problem, showing your steps even if wrong, then raising your hand and pointing to where you got stuck. "I tried doing this, but then I got stuck here."
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Building Trust</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
+                    <div class="behavior-card">
                         <div class="behavior-title">Communicate About Deadlines Early</div>
-                        <div class="behavior-description">If you won't finish homework, tell your teacher BEFORE it's due. Ask for what you need.</div>
+                        <div class="behavior-description">If you won't finish homework, tell your teacher BEFORE it's due.</div>
                         <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> On Tuesday you realize you can't finish the essay due Friday because you have 3 tests. You tell your teacher Tuesday or Wednesday: "I have 3 tests this week. Can I turn the essay in Monday instead?"
+                            <span class="example-label">Looks like:</span> Tuesday you realize you can't finish the essay due Friday. You tell your teacher Wednesday: "I have 3 tests this week. Can I turn it in Monday?"
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
-                        <div class="behavior-title">Give Real Answers Sometimes</div>
-                        <div class="behavior-description">When teacher asks "How are you?", give an actual answer occasionally—not always just "fine."</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> "Actually kind of stressed about the game tonight" or "Pretty good, excited about the field trip" or "Tired, stayed up late studying."
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Accept Help When Offered</div>
-                        <div class="behavior-description">If teacher offers help time or tutoring, attend at least once in the first month.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Teacher says "I have office hours Tuesday and Thursday after school." You show up at least once, even if just for 10 minutes to ask one question.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Read Feedback</div>
-                        <div class="behavior-description">Actually read teacher feedback on assignments before filing or throwing them away.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Getting your graded essay back and reading the comments in the margins and at the end before putting it in your folder. Consider what the teacher wrote.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Classroom Citizenship</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
+                    <div class="behavior-card">
                         <div class="behavior-title">Say Thank You</div>
-                        <div class="behavior-description">Thank your teacher when they help you individually or return graded work.</div>
+                        <div class="behavior-description">Thank your teacher when they help you individually.</div>
                         <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Teacher explains something one-on-one at your desk, you say "Thanks, that helps" or "Thank you" when they hand back your test.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Be Ready Quickly</div>
-                        <div class="behavior-description">Have materials out and be ready within 2 minutes of the bell ringing.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> Bell rings. Within 2 minutes your notebook, pencil, and textbook are on your desk. You're looking at the board for instructions, not still digging in your backpack.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Participate Weekly</div>
-                        <div class="behavior-description">Make at least one classroom contribution per week (answer, question, or comment).</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> During discussion, you raise your hand and add one comment or answer one question voluntarily at some point during the week. Doesn't have to be every day.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Use Names</div>
-                        <div class="behavior-description">Use your teacher's name when addressing them respectfully.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">Looks like:</span> "Ms. Rodriguez, can you explain question 5?" or "Mr. Lee, I have a question about the reading" NOT just "Hey" or "Teacher."
+                            <span class="example-label">Looks like:</span> Teacher explains something at your desk, you say "Thanks, that helps."
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- DON'T SECTION -->
-        <div class="section dont-section">
-            <div class="section-title">✗ DON'T: Actions That Damage Relationships</div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Relationship Barriers</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
+                
+                <h2 style="color: #ef4444; margin-top: 40px; margin-bottom: 15px;">✗ DON'T: Actions That Damage Relationships</h2>
+                
+                <div class="behavior-grid">
+                    <div class="behavior-card dont">
                         <div class="behavior-title">Don't Block Communication</div>
-                        <div class="behavior-description">Don't wear headphones/earbuds during instruction unless explicitly permitted by your teacher.</div>
+                        <div class="behavior-description">Don't wear headphones/earbuds during instruction unless teacher says it's okay.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> When teacher is talking to the class or giving instructions, earbuds are out. Music during independent work is only okay if teacher says it's okay.
+                            <span class="example-label">What this means:</span> When teacher is talking to the class, earbuds are out. Music during independent work only if teacher permits it.
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
+                    <div class="behavior-card dont">
                         <div class="behavior-title">Don't Turn Away</div>
-                        <div class="behavior-description">Don't turn your back, put your head down, or avoid eye contact when teacher addresses you individually.</div>
+                        <div class="behavior-description">Don't turn your back, put your head down, or avoid eye contact when teacher addresses you.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If teacher walks over to help you or ask you a question, face them, look up, make eye contact even briefly. Don't put your hood up or turn away.
+                            <span class="example-label">What this means:</span> If teacher walks over to help you, face them, look up, make eye contact. Don't put your hood up or turn away.
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Use Complete Silence</div>
-                        <div class="behavior-description">Don't refuse to speak at all. "I'd rather not answer" is acceptable, total silence isn't.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If teacher asks you a question and you really don't want to answer, say "Can you come back to me?" or "I'd rather not answer." Saying nothing and staring makes things worse.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Start with Complaints</div>
-                        <div class="behavior-description">Don't enter class and immediately complain about the assignment or grading before even greeting the teacher.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> Walking in and immediately saying "This homework was so stupid" or "Why did I get a bad grade?" sets a negative tone. Greet first, then discuss concerns calmly later.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Communication Mistakes</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
+                    <div class="behavior-card dont">
                         <div class="behavior-title">Don't Hide Struggles Then Blame</div>
-                        <div class="behavior-description">Don't say "I'm fine" when you're clearly struggling, then blame the teacher later for not helping you.</div>
+                        <div class="behavior-description">Don't say "I'm fine" when struggling, then blame the teacher later for not helping.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If teacher asks "Do you understand?" and you say "Yeah I'm good" when you're actually confused, you can't later say "You never helped me." Be honest when asked.
+                            <span class="example-label">What this means:</span> If teacher asks "Do you understand?" and you say "Yeah I'm good" when you're confused, you can't later say "You never helped me."
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Lie About Effort</div>
-                        <div class="behavior-description">Don't claim you "studied for hours" if you didn't. Be honest about your actual effort.</div>
+                    <div class="behavior-card dont">
+                        <div class="behavior-title">Don't Start with Complaints</div>
+                        <div class="behavior-description">Don't enter class and immediately complain about assignments before greeting the teacher.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If you only studied 20 minutes and failed the test, don't tell teacher you studied for 3 hours. Say "I didn't study enough" or "I studied but I focused on the wrong things."
+                            <span class="example-label">What this means:</span> Walking in and saying "This homework was so stupid" sets a negative tone. Greet first, discuss concerns later.
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Wait Until Failing</div>
-                        <div class="behavior-description">Don't wait until you have an F to speak up about not understanding material.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If you're confused in Week 2, speak up in Week 2. Don't wait until Week 8 when you're failing and then say "I never understood any of this."
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Interrupt</div>
-                        <div class="behavior-description">Don't interrupt the teacher mid-sentence. Raise your hand or wait for a pause.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> Teacher is explaining something. You have a question. Don't shout it out while they're talking. Raise your hand and wait, or wait until they finish the explanation.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="behavior-category">
-                <div class="category-header">Counterproductive Behaviors</div>
-                <div class="behavior-list">
-                    <div class="behavior-item">
+                    <div class="behavior-card dont">
                         <div class="behavior-title">Don't Show Visible Frustration</div>
-                        <div class="behavior-description">Don't make disruptive noises (sighing, pen-clicking, talking to others) when teacher corrects your work.</div>
+                        <div class="behavior-description">Don't sigh loudly, slam your pencil, or mutter when teacher corrects your work.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> Teacher marks something wrong on your paper. Don't sigh loudly, slam your pencil down, or mutter to your neighbor. If you're frustrated, talk to teacher privately after class.
+                            <span class="example-label">What this means:</span> If you're frustrated, talk to teacher privately after class instead of making disruptive noises.
                         </div>
                     </div>
                     
-                    <div class="behavior-item">
+                    <div class="behavior-card dont">
                         <div class="behavior-title">Don't Mock Quietly</div>
-                        <div class="behavior-description">Don't mock the teacher's suggestions or instructions to classmates after the teacher walks away.</div>
+                        <div class="behavior-description">Don't mock the teacher's suggestions to classmates after they walk away.</div>
                         <div class="behavior-example">
-                            <span class="example-label">What this means:</span> Teacher gives you feedback and walks away. Don't turn to your friend and whisper "That's so dumb" or roll your eyes. Teacher usually notices, and it damages trust.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Refuse Reasonable Requests</div>
-                        <div class="behavior-description">Don't refuse to sit in an assigned seat or move when asked for a legitimate reason.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> If teacher assigns seats or asks you to move because you're off-task, comply. You can discuss it later privately, but refusing in the moment creates conflict.
-                        </div>
-                    </div>
-                    
-                    <div class="behavior-item">
-                        <div class="behavior-title">Don't Leave Without Acknowledging</div>
-                        <div class="behavior-description">Don't bolt out the door at the bell without any acknowledgment of the teacher.</div>
-                        <div class="behavior-example">
-                            <span class="example-label">What this means:</span> Bell rings, you're packing up. Make brief eye contact with teacher, nod, or say "bye" or "see you tomorrow" as you leave. Don't just run out like teacher doesn't exist.
+                            <span class="example-label">What this means:</span> Teacher gives feedback and walks away. Don't whisper "That's so dumb" to your friend. Teacher usually notices.
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- QUICK REFERENCE -->
-        <div class="quick-reference">
-            <h2>Quick Daily Checklist - Did I Do These Today?</h2>
-            <div class="quick-list">
-                <div class="quick-item do">✓ Greeted teacher by name</div>
-                <div class="quick-item do">✓ Made eye contact at least once</div>
-                <div class="quick-item do">✓ Asked a question OR answered when called on</div>
-                <div class="quick-item do">✓ Had materials ready within 2 minutes</div>
-                <div class="quick-item do">✓ Tried before asking for help</div>
-                <div class="quick-item dont">✗ No earbuds during instruction</div>
-                <div class="quick-item dont">✗ No negative comments to classmates</div>
-                <div class="quick-item dont">✗ No lying about effort or understanding</div>
-                <div class="quick-item dont">✗ No bolting without acknowledgment</div>
+                
+                <div class="action-buttons" style="margin-top: 40px;">
+                    <button class="btn btn-primary btn-block" onclick="completeSection('guide', 'reflect')">I've Read the Behaviors →</button>
+                </div>
             </div>
             
-            <p style="margin-top: 20px; font-weight: 600; color: #92400e;">
-                Remember: These aren't just "nice" behaviors. Research proves these actions directly improve your engagement and achievement. You have more control over your success than you think.
-            </p>
+            <!-- Section 3: Reflection -->
+            <div class="content-section" id="reflect">
+                <div class="section-header">
+                    <h1>Your Plan: Quick Self-Check</h1>
+                    <div class="subtitle">Before the quiz, think about YOUR actual behavior</div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <strong>This isn't graded.</strong> It's to make sure you actually think about this before the quiz. Type something (anything honest) in each box to unlock the next section.
+                </div>
+                
+                <div class="reflection-box">
+                    <div class="reflection-prompt">1. Pick ONE DO behavior you'll try tomorrow. Which one and when?</div>
+                    <div class="reflection-hint">Be specific about the class. Example: "Tomorrow in 1st period, I'll greet Mr. Davis when I walk in"</div>
+                    <textarea id="reflect1" placeholder="Type your answer here..." oninput="checkReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-box">
+                    <div class="reflection-prompt">2. What's ONE DON'T behavior you've done this week?</div>
+                    <div class="reflection-hint">Be honest. Example: "I had my earbuds in during instructions in math on Tuesday"</div>
+                    <textarea id="reflect2" placeholder="Type your answer here..." oninput="checkReflections()"></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-block" id="reflectBtn" disabled onclick="completeSection('reflect', 'practice')">Continue to Practice →</button>
+                </div>
+                
+                <div class="alert alert-info" style="margin-top: 20px;">
+                    <strong>Tip:</strong> Once you type something in both boxes, the button will unlock.
+                </div>
+            </div>
+            
+            <!-- Section 4: Practice -->
+            <div class="content-section" id="practice">
+                <div class="section-header">
+                    <h1>Practice: Try Some Scenarios</h1>
+                    <div class="subtitle">The quiz will have questions like these</div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>Read each scenario and pick the best answer.</strong> After you answer all three, you can check your work and move on.
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-text">
+                        <strong>Scenario 1:</strong> It's Tuesday. You have 3 tests Friday and won't finish the history essay that's also due Friday. What should you do?
+                    </div>
+                    <div class="scenario-options" id="options1">
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario1" value="a">
+                            <span>Just don't do it and explain after it's due</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario1" value="b">
+                            <span>Stay up all night to finish everything</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario1" value="c" data-correct="true">
+                            <span>Tell your teacher Tuesday or Wednesday and ask if you can turn it in Monday instead</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario1" value="d">
+                            <span>Copy someone else's essay</span>
+                        </label>
+                    </div>
+                    <div class="scenario-feedback" id="feedback1"></div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-text">
+                        <strong>Scenario 2:</strong> The teacher is explaining a math problem. You're confused at step 2. What's the BEST thing to do?
+                    </div>
+                    <div class="scenario-options" id="options2">
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario2" value="a">
+                            <span>Wait until after class to ask</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario2" value="b">
+                            <span>Just copy what's on the board and figure it out later</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario2" value="c" data-correct="true">
+                            <span>Raise your hand right then and say "Can you explain step 2 again?"</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario2" value="d">
+                            <span>Ask your friend to explain it</span>
+                        </label>
+                    </div>
+                    <div class="scenario-feedback" id="feedback2"></div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-text">
+                        <strong>Scenario 3:</strong> Your teacher just marked something wrong on your paper. You're frustrated. What should you NOT do?
+                    </div>
+                    <div class="scenario-options" id="options3">
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario3" value="a">
+                            <span>Take a breath and ask the teacher to explain after class</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario3" value="b" data-correct="true">
+                            <span>Sigh loudly, slam your pencil down, and mutter to your neighbor</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario3" value="c">
+                            <span>Look at what you got wrong and try to understand the mistake</span>
+                        </label>
+                        <label class="scenario-option">
+                            <input type="radio" name="scenario3" value="d">
+                            <span>Make a note to ask about it during help time</span>
+                        </label>
+                    </div>
+                    <div class="scenario-feedback" id="feedback3"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="checkScenarios()">Check My Answers</button>
+                    <button class="btn btn-success" id="practiceCompleteBtn" disabled onclick="completeSection('practice', 'quiz')">Continue to Quiz →</button>
+                </div>
+            </div>
+            
+            <!-- Section 5: Quiz -->
+            <div class="content-section" id="quiz">
+                <div class="section-header">
+                    <h1>Knowledge Check</h1>
+                    <div class="subtitle">Time to show what you learned</div>
+                </div>
+                
+                <div class="callout">
+                    <h3>You're Ready</h3>
+                    <p>You've read the behaviors, thought about your own habits, and practiced with scenarios.</p>
+                    <p>The quiz has questions about the research, questions where you identify behaviors, and scenarios where you apply what you learned.</p>
+                    <p><strong>You can reference the guide if needed, but try from memory first.</strong></p>
+                </div>
+                
+                <div class="alert alert-success">
+                    <strong>After you finish:</strong> Pick that ONE behavior you said you'd try. Actually do it tomorrow. See what happens.
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsVfBaB70R1Juc-OKasHLxooBLrPRp9LNFGUAQixtCXEhFqw/viewform?usp=header" target="_blank" class="btn btn-success btn-block">Take the Knowledge Check</a>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <script>
+        // Track completed sections
+        const completed = new Set(['intro']);
+        
+        function navigateTo(section) {
+            const navItem = document.querySelector(`[data-section="${section}"]`);
+            
+            // Check if section is locked
+            if (navItem.classList.contains('locked')) {
+                return;
+            }
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById(section).classList.add('active');
+            
+            // Update nav active state
+            document.querySelectorAll('.nav-section').forEach(n => {
+                n.classList.remove('active');
+            });
+            navItem.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function completeSection(current, next) {
+            // Mark current as completed
+            completed.add(current);
+            const currentNav = document.querySelector(`[data-section="${current}"]`);
+            currentNav.classList.add('completed');
+            currentNav.classList.remove('active');
+            
+            // Unlock next section
+            const nextNav = document.querySelector(`[data-section="${next}"]`);
+            nextNav.classList.remove('locked');
+            nextNav.classList.add('active');
+            
+            // Navigate to next
+            navigateTo(next);
+        }
+        
+        // Reflection validation
+        function checkReflections() {
+            const text1 = document.getElementById('reflect1').value.trim();
+            const text2 = document.getElementById('reflect2').value.trim();
+            const btn = document.getElementById('reflectBtn');
+            
+            // Require at least 10 characters in each to prevent single-letter bypassing
+            if (text1.length >= 10 && text2.length >= 10) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+        
+        // Scenario checking
+        let scenariosChecked = false;
+        
+        function checkScenarios() {
+            let allCorrect = true;
+            
+            for (let i = 1; i <= 3; i++) {
+                const selected = document.querySelector(`input[name="scenario${i}"]:checked`);
+                const feedback = document.getElementById(`feedback${i}`);
+                const options = document.querySelectorAll(`input[name="scenario${i}"]`);
+                
+                if (!selected) {
+                    feedback.className = 'scenario-feedback show incorrect';
+                    feedback.textContent = '⚠️ Please select an answer.';
+                    allCorrect = false;
+                    continue;
+                }
+                
+                const isCorrect = selected.dataset.correct === 'true';
+                const selectedLabel = selected.closest('.scenario-option');
+                
+                // Remove previous styling
+                options.forEach(opt => {
+                    opt.closest('.scenario-option').classList.remove('correct', 'incorrect');
+                });
+                
+                if (isCorrect) {
+                    selectedLabel.classList.add('correct');
+                    feedback.className = 'scenario-feedback show correct';
+                    feedback.textContent = '✓ Correct! This behavior builds relationships.';
+                } else {
+                    selectedLabel.classList.add('incorrect');
+                    const correctOption = document.querySelector(`input[name="scenario${i}"][data-correct="true"]`);
+                    correctOption.closest('.scenario-option').classList.add('correct');
+                    feedback.className = 'scenario-feedback show incorrect';
+                    feedback.textContent = '✗ Not quite. Look at the highlighted correct answer.';
+                    allCorrect = false;
+                }
+            }
+            
+            scenariosChecked = true;
+            
+            // Enable continue button regardless (they tried)
+            document.getElementById('practiceCompleteBtn').disabled = false;
+        }
+    </script>
 </body>
 </html>
